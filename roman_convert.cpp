@@ -5,43 +5,66 @@
 #include<dos.h>
 #include<graphics.h>
 #include<process.h>
-char roman[50];
 int*normal;
+char roman[25];
 int romanconvert();
+void normalconvert();
 void cover();
-void output();
+int mainscreen(int);
 int checkvalid(char*);
 void main()
 {
-	char roman[50],ans='y';
-	int gdriver = DETECT, gmode,i;
+	char ans='n';
+	int mode,gdriver = DETECT, gmode;
 	initgraph(&gdriver, &gmode, "");
-
-	setbkcolor(1);
+	setbkcolor(4);
 	cover();
-	while(ans!='n')
+	while(ans!='y')
        {
-		 clrscr();
-		 cleardevice();
-		 output();
-		//int valid=checkvalid(roman);
-		//number=romanconvert(end,roman);
-		//if(checkvalid==0)
-		cout<<romanconvert();
-		gotoxy(47,9);
-		outtextxy(0,117,"\n\nDo you want to enter another number? ");
-		setfillstyle(1,2);
-		fillellipse(250,463,5000,10);
-		settextstyle(2,0,5);
-		outtextxy(125,455,"Press 'n' or 'N' to Exit or any other letter to continue.");
-		settextstyle(5,0,2);
-		cin>>ans;
+		if(ans==27)
+		{
+			cleardevice();
+			closegraph();
+			exit(0);
+		}
+		mode=mainscreen(0);
+		ans='y';
+		while(ans=='y')
+		{
+			mainscreen(1);
+			switch(mode)
+			{
+				case'r':cout<<romanconvert();
+					break;
+				case 27:cleardevice();
+					closegraph();
+					exit(0);
+				case'n':gotoxy(10,4);
+					cout<<"";
+					break;
+			}
+			gotoxy(47,9);
+			outtextxy(0,117,"Do you want to enter another number?");
+			ans=getch();
+			settextstyle(2,0,6);
+			switch(ans)
+			{
+				case'Y':
+				case'y':outtextxy(370,125,"Yes");
+					break;
+				case'N':
+				case'n':outtextxy(370,125,"No");
+					break;
+				case 27:outtextxy(370,125,"Exiting...");
+					delay(500);
+					break;
+			}
+			delay(500);
+		}
 
        }
-       exit(0);
-       //delay(1000);
+       closegraph();
 }
-
 void cover()
 {
 	int x1=125,y1=101,x2=300,y2=199,x3=175,y3=298,i=0,size=7;
@@ -83,57 +106,72 @@ void cover()
 	setlinestyle(1,0,2);
 	line(150,30,455,30);
 	line(150,32,455,32);
-}
 
-void output()
+}
+int mainscreen(int type)
 {
-	int poly[8];
-	poly[0]=0;
-	poly[1]=407;
-	poly[2]=638;
-	poly[3]=407;
-	poly[4]=638;
-	poly[5]=475;
-	poly[6]=0;
-	poly[7]=475;
-	poly[8]=479;
-	settextstyle(4,0,3);
-	outtextxy(153,3,"From ROMAN");
-	outtextxy(321,3,"to");
-	outtextxy(343,3,"ARABIC!");
-	setlinestyle(1,0,2);
-	line(150,30,455,30);
-	line(150,32,455,32);
-	settextstyle(5,0,2);
-	outtextxy(2,51,"Roman numeral:");
-	outtextxy(2,84,"Converted Number:");
-	setfillstyle(1,2);
-	setlinestyle(0,0,2);
-	fillpoly(4,poly);
-	settextstyle(2,0,5);
-	settextstyle(2,0,5);
-	outtextxy(205,415,"Press 'r' to Switch between modes");
-	outtextxy(235,435,"Current mode: From Roman");
-	outtextxy( 235,455,"Press 'Enter' to convert");
-	settextstyle(5,0,2);
+	int ret,poly[8];
+	if(!type)
+	{
+		clrscr();
+		cleardevice();
+		settextstyle(4,0,3);
+		outtextxy(163,3,"From ROMAN to ARABIC!");
+	       //	outtextxy(321,3,"to");
+	     //	outtextxy(343,3,"ARABIC!");
+		setlinestyle(1,0,2);
+		line(160,30,465,30);
+		line(160,32,465,32);
+		poly[0]=0;
+		poly[1]=410;
+		poly[2]=639;
+		poly[3]=410;
+		poly[4]=639;
+		poly[5]=475;
+		poly[6]=0;
+		poly[7]=475;
+		poly[8]=479;
+		settextstyle(2,0,6);
+		setfillstyle(1,12);
+		setlinestyle(0,0,2);
+		fillpoly(4,poly);
+		outtextxy(180,415,"Press 'r' to convert from Roman and");
+		outtextxy(205,435,"Press 'n' to convert to Roman.");
+		outtextxy(255,455,"Press 'Esc' to Exit");
+		outtextxy(2,51,"Enter mode:");
+		ret=getche();
+		settextstyle(4,0,3);
+		outtextxy(153,3,"From ROMAN");
+		outtextxy(321,3,"to");
+		outtextxy(343,3,"ARABIC!");
+		setlinestyle(1,0,2);
+		line(150,30,455,30);
+		line(150,32,455,32);
+		settextstyle(5,0,2);
+		outtextxy(2,51,"Roman numeral:");
+		outtextxy(2,84,"Converted Number:");
+		return(ret);
+	}
+	else
+	{
+		clrscr();
+		cleardevice();
+		settextstyle(4,0,3);
+		outtextxy(153,3,"From ROMAN");
+		outtextxy(321,3,"to");
+		outtextxy(343,3,"ARABIC!");
+		setlinestyle(1,0,2);
+		line(150,30,455,30);
+		line(150,32,455,32);
+		settextstyle(5,0,2);
+		outtextxy(2,51,"Roman numeral:");
+		outtextxy(2,84,"Converted Number:");
+	}
 }
 
 int romanconvert()
 {
-	int len,i=0,number=0,k=0;
-//	int*normal;
-  //	char roman[50];
-	//clrscr();
-	//cleardevice();
-     //	settextstyle(5,0,2);
-       //	outtextxy(2,51,"Roman numeral:");
-//	outtextxy(2,84,"Converted Number:");
-  //	setfillstyle(1,2);
-    //	fillellipse(250,463,5000,10);
-      //	settextstyle(2,0,5);
-	//settextstyle(2,0,5);
-       //	outtextxy(235,455,"Press 'Enter' to Convert");
-	settextstyle(5,0,2);
+	int len,i=0,number=0,j=0;
 	gotoxy(20,5);
 	gets(roman);
 	len=strlen(roman);
@@ -171,11 +209,11 @@ int romanconvert()
 		{
 			if(normal[i+1]==normal[i]&&i+2<len)
 			{
-				k=normal[i]+normal[i+1];
-				if(k<normal[i+2])
-					number-=k;
+				j=normal[i]*2;
+				if(j<normal[i+2])
+					number-=j;
 				else
-					number+=k;
+					number+=j;
 				i++;
 			}
 			else
