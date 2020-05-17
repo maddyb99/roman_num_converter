@@ -7,6 +7,7 @@
 #include<process.h>
 int*normal;
 char roman[25];
+void convert(int);
 int romanconvert();
 void normalconvert();
 void cover();
@@ -35,7 +36,7 @@ void main()
 			switch(mode)
 			{
 				case'R':
-				case'r':cout<<romanconvert();
+				case'r':convert(0);
 					break;
 				case'N':
 				case'n':gotoxy(10,4);
@@ -183,11 +184,39 @@ int mainscreen(int type)
 	}
 }
 
+void convert(int mode)
+{
+	int i=0,j=20;
+       //	roman=new char[25];
+	char ch;
+	settextstyle(2,0,5);
+	if(!mode)
+	{	//gotoxy(j,5);
+		ch=getche();
+		while(ch!=27)
+		{
+			if(ch!=27)
+			{
+				gotoxy(j,5);
+				cout<<ch;
+			}
+			roman[i]=ch;
+			cout<<romanconvert();
+			j++;
+			//gotoxy(j,5);
+			ch=getch();
+			i++;
+		}
+	}
+	settextstyle(5,0,2);
+       //	delete roman;
+}
+
 int romanconvert()
 {
 	int len,i=0,number=0,j=0;
-	gotoxy(20,5);
-	gets(roman);
+       //	gotoxy(20,5);
+       //	gets(roman);
 	len=strlen(roman);
 	normal=new int[len];
 	for(i=0;i<len;i++)
