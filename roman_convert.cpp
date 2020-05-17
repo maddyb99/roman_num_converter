@@ -34,11 +34,10 @@ void main()
 			mainscreen(1);
 			switch(mode)
 			{
+				case'R':
 				case'r':cout<<romanconvert();
 					break;
-				case 27:cleardevice();
-					closegraph();
-					exit(0);
+				case'N':
 				case'n':gotoxy(10,4);
 					cout<<"";
 					break;
@@ -139,7 +138,22 @@ int mainscreen(int type)
 		outtextxy(205,435,"Press 'n' to convert to Roman.");
 		outtextxy(255,455,"Press 'Esc' to Exit");
 		outtextxy(2,51,"Enter mode:");
-		ret=getche();
+		ret=getch();
+		settextstyle(2,0,5);
+		switch(ret)
+		{
+			case'r':
+			case'R':outtextxy(107,55,"From Roman");
+				break;
+			case'n':
+			case'N':outtextxy(107,55,"To Roman");
+				break;
+			case 27:outtextxy(107,55,"Exiting...");
+				delay(1000);
+				closegraph();
+				exit(0);
+		}
+		delay(500);
 		settextstyle(4,0,3);
 		outtextxy(153,3,"From ROMAN");
 		outtextxy(321,3,"to");
