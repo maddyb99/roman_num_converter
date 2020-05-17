@@ -12,7 +12,7 @@ int romanconvert();
 void normalconvert();
 void cover();
 int mainscreen(int);
-int checkvalid(char*);
+int checkvalid();
 void main()
 {
 	char ans='n';
@@ -38,9 +38,9 @@ void main()
 				case'R':
 				case'r':convert(0);
 					break;
-				case'N':
-				case'n':gotoxy(10,4);
-					cout<<"";
+				case'A':
+				case'a':gotoxy(10,4);
+					cout<<"Under construction :(";
 					break;
 			}
 			gotoxy(47,9);
@@ -135,8 +135,8 @@ int mainscreen(int type)
 		setfillstyle(1,12);
 		setlinestyle(0,0,2);
 		fillpoly(4,poly);
-		outtextxy(180,415,"Press 'r' to convert from Roman and");
-		outtextxy(205,435,"Press 'n' to convert to Roman.");
+		outtextxy(180,415,"Press 'r' to convert to ARABIC and");
+		outtextxy(205,435,"Press 'a' to convert to ROMAN.");
 		outtextxy(255,455,"Press 'Esc' to Exit");
 		outtextxy(2,51,"Enter mode:");
 		ret=getch();
@@ -144,10 +144,10 @@ int mainscreen(int type)
 		switch(ret)
 		{
 			case'r':
-			case'R':outtextxy(107,55,"From Roman");
+			case'R':outtextxy(107,55,"To ARABIC...");
 				break;
-			case'n':
-			case'N':outtextxy(107,55,"To Roman");
+			case'a':
+			case'A':outtextxy(107,55,"To ROMAN...");
 				break;
 			case 27:outtextxy(107,55,"Exiting...");
 				delay(1000);
@@ -163,8 +163,8 @@ int mainscreen(int type)
 		line(150,30,455,30);
 		line(150,32,455,32);
 		settextstyle(5,0,2);
-		outtextxy(2,51,"Roman numeral:");
-		outtextxy(2,84,"Converted Number:");
+		outtextxy(2,51,"Roman Numeral:");
+		outtextxy(2,84,"Arabic Numeral:");
 		return(ret);
 	}
 	else
@@ -179,8 +179,8 @@ int mainscreen(int type)
 		line(150,30,455,30);
 		line(150,32,455,32);
 		settextstyle(5,0,2);
-		outtextxy(2,51,"Roman numeral:");
-		outtextxy(2,84,"Converted Number:");
+		outtextxy(2,51,"Roman Numeral:");
+		outtextxy(2,84,"Arabic Numeral:");
 	}
 }
 
@@ -201,7 +201,16 @@ void convert(int mode)
 				cout<<ch;
 			}
 			roman[i]=ch;
-			cout<<romanconvert();
+			if(checkvalid())
+				cout<<romanconvert();
+			else
+			{
+				gotoxy(20,7);
+				cout<<"      ";
+				settextstyle(2,0,5);
+				outtextxy(145,96,"(Error_(0x0254):Invalid Entry)");
+				settextstyle(4,0,2);
+			}
 			j++;
 			//gotoxy(j,5);
 			ch=getch();
@@ -270,19 +279,45 @@ int romanconvert()
 
 	}
 	number+=normal[i];
-	gotoxy(22,7);
+	gotoxy(20,7);
 	return(number);
 }
 
-int checkvalid(char*rome)
-{	int i=0,flag=0;
-	char temp;
-	while(i<=strlen(rome))
-	{     if(flag>=2)
-		{
-			i+=strlen(rome);
-			return(1);
+int checkvalid()
+{
+	int i=0, j;
+	while(i<strlen(roman))
+	{
+		if(roman[i]==roman[i+1])
+		{	if(roman[i+1]==roman[i+2])
+			{	if(roman[i+2]==roman[i+3])
+					return(0);
+			}
 		}
+		switch(roman[i])
+		{	case'i':break;
+			case'I':break;
+			case'v':
+			case'V':if(roman[i+1]=='v'||roman[i+1]=='V')
+					return(0);
+				break;
+			case'x':break;
+			case'X':break;
+			case'l':
+			case'L':if(roman[i+1]=='l'||roman[i+1]=='L')
+					return(0);
+				break;
+			case'C':break;
+			case'c':break;
+			case'd':
+			case'D':if(roman[i+1]=='D'||roman[i+1]=='d')
+					return(0);
+				break;
+			case'm':break;
+			case'M':break;
+			default:return(0);
+		}
+		i++;
 	}
-	return(0);
+	return(1);
 }
